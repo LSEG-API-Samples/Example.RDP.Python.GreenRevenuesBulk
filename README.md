@@ -1,6 +1,6 @@
 # RDP APIs Green Revenues CFS Bulk file Workflow
-- version: 1.0
-- Last update: July 2023
+- version: 1.0.1
+- Last update: Sep 2023
 - Environment: Jupyter Notebook
 - Prerequisite: [Access to RDP credentials](#prerequisite)
 
@@ -104,7 +104,7 @@ The first step is to unzip or download the example project folder into a directo
     ``` bash
     (CFS) $>jupyter lab
     ```
-6. Open a ```Greenrevenue-BULK.ipynb``` file and run each cell to learn the workflow step by step.
+6. Open a ```Greenrevenue-BULK.ipynb``` or ```Greenrevenue-BULK-CSV.ipynb``` file and run each cell to learn the workflow step by step.
 
     ![figure-1](images/02_green_revenue_notebook.png "Greenrevenue-BULK.ipynb notebook file")
 
