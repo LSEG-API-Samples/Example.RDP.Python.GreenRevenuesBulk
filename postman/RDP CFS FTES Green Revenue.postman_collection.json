@@ -1,0 +1,261 @@
+{
+	"info": {
+		"_postman_id": "21235412-b232-4965-9a5e-f71bab069af2",
+		"name": "RDP CFS FTES Green Revenue",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "946620"
+	},
+	"item": [
+		{
+			"name": "Step 1: Get Access Token using Password Grant (Machine ID) Copy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//var jsonData = pm.response.json();",
+							"//pm.globals.set(\"ACCESS_TOKEN\", jsonData.access_token);",
+							"//pm.globals.set(\"REFRESH_TOKEN\", jsonData.refresh_token);",
+							"",
+							"var jsonData = JSON.parse(responseBody);",
+							"postman.setEnvironmentVariable(\"ACCESS_TOKEN\", jsonData.access_token);",
+							"postman.setEnvironmentVariable(\"REFRESH_TOKEN\", jsonData.refresh_token);",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{ACCESS_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "username",
+							"value": "{{USERNAME}}",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "{{PASSWORD}}",
+							"type": "text"
+						},
+						{
+							"key": "grant_type",
+							"value": "password",
+							"type": "text"
+						},
+						{
+							"key": "scope",
+							"value": "trapi",
+							"type": "text"
+						},
+						{
+							"key": "takeExclusiveSignOnControl",
+							"value": "true",
+							"type": "text"
+						},
+						{
+							"key": "client_id",
+							"value": "{{APP_KEY}}",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://{{RDP_HOST}}/auth/oauth2/v1/token",
+					"protocol": "https",
+					"host": [
+						"{{RDP_HOST}}"
+					],
+					"path": [
+						"auth",
+						"oauth2",
+						"v1",
+						"token"
+					]
+				},
+				"description": "Gets the Access and Refresh tokens"
+			},
+			"response": []
+		},
+		{
+			"name": "Step 2: Get list of Package IDs",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{ACCESS_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://{{RDP_HOST}}/file-store/v1/file-sets?bucket=bulk-greenrevenue",
+					"protocol": "https",
+					"host": [
+						"{{RDP_HOST}}"
+					],
+					"path": [
+						"file-store",
+						"v1",
+						"file-sets"
+					],
+					"query": [
+						{
+							"key": "bucket",
+							"value": "bulk-greenrevenue"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Step 3: Get list of Files",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{ACCESS_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://{{RDP_HOST}}/file-store/v1/file-sets?bucket=bulk-greenrevenue&packageId=4316-d43b-81c40763-8e6a-0dbec8162ab1",
+					"protocol": "https",
+					"host": [
+						"{{RDP_HOST}}"
+					],
+					"path": [
+						"file-store",
+						"v1",
+						"file-sets"
+					],
+					"query": [
+						{
+							"key": "bucket",
+							"value": "bulk-greenrevenue"
+						},
+						{
+							"key": "packageId",
+							"value": "4316-d43b-81c40763-8e6a-0dbec8162ab1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Step 4: Get a File link",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{ACCESS_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://{{RDP_HOST}}/file-store/v1/files/4725-b83d-62887539-b1ff-e75272de70da/stream?doNotRedirect=true",
+					"protocol": "https",
+					"host": [
+						"{{RDP_HOST}}"
+					],
+					"path": [
+						"file-store",
+						"v1",
+						"files",
+						"4725-b83d-62887539-b1ff-e75272de70da",
+						"stream"
+					],
+					"query": [
+						{
+							"key": "doNotRedirect",
+							"value": "true"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Step 4: Get a File link direct",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{ACCESS_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://{{RDP_HOST}}/file-store/v1/files/4725-b83d-62887539-b1ff-e75272de70da/stream",
+					"protocol": "https",
+					"host": [
+						"{{RDP_HOST}}"
+					],
+					"path": [
+						"file-store",
+						"v1",
+						"files",
+						"4725-b83d-62887539-b1ff-e75272de70da",
+						"stream"
+					],
+					"query": [
+						{
+							"key": "doNotRedirect",
+							"value": "true"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
