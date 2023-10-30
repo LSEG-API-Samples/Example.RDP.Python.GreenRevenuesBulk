@@ -1,6 +1,6 @@
 # RDP APIs Green Revenues CFS Bulk file Workflow
-- version: 1.0.1
-- Last update: Sep 2023
+- version: 1.5.0
+- Last update: Oct 2023
 - Environment: Jupyter Notebook
 - Prerequisite: [Access to RDP credentials](#prerequisite)
 
