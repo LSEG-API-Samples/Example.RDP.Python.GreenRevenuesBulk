@@ -7,7 +7,7 @@
 	},
 	"item": [
 		{
-			"name": "Step 1: Get Access Token using Password Grant (Machine ID) Copy",
+			"name": "Step 1: Get Access Token using Password Grant (Machine ID)",
 			"event": [
 				{
 					"listen": "test",
@@ -106,7 +106,7 @@
 			"response": []
 		},
 		{
-			"name": "Step 2: Get list of Package IDs",
+			"name": "Step 2: Listing the Package Ids using the Bucket Name",
 			"request": {
 				"auth": {
 					"type": "bearer",
@@ -121,7 +121,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "https://{{RDP_HOST}}/file-store/v1/file-sets?bucket=bulk-greenrevenue",
+					"raw": "https://{{RDP_HOST}}/file-store/v1/packages?bucketName=bulk-greenrevenue",
 					"protocol": "https",
 					"host": [
 						"{{RDP_HOST}}"
@@ -129,11 +129,11 @@
 					"path": [
 						"file-store",
 						"v1",
-						"file-sets"
+						"packages"
 					],
 					"query": [
 						{
-							"key": "bucket",
+							"key": "bucketName",
 							"value": "bulk-greenrevenue"
 						}
 					]
@@ -142,7 +142,7 @@
 			"response": []
 		},
 		{
-			"name": "Step 3: Get list of Files",
+			"name": "Step 3: Listing the Filesets of the Bulk Green Revenues Data with the packageId",
 			"request": {
 				"auth": {
 					"type": "bearer",
@@ -157,7 +157,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "https://{{RDP_HOST}}/file-store/v1/file-sets?bucket=bulk-greenrevenue&packageId=4316-d43b-81c40763-8e6a-0dbec8162ab1",
+					"raw": "https://{{RDP_HOST}}/file-store/v1/file-sets?bucket=bulk-greenrevenue&packageId=4e94-6d63-fea034dc-90e2-de33895bd4e9",
 					"protocol": "https",
 					"host": [
 						"{{RDP_HOST}}"
@@ -174,7 +174,7 @@
 						},
 						{
 							"key": "packageId",
-							"value": "4316-d43b-81c40763-8e6a-0dbec8162ab1"
+							"value": "4e94-6d63-fea034dc-90e2-de33895bd4e9"
 						}
 					]
 				}
@@ -246,16 +246,107 @@
 						"files",
 						"4725-b83d-62887539-b1ff-e75272de70da",
 						"stream"
-					],
-					"query": [
-						{
-							"key": "doNotRedirect",
-							"value": "true"
-						}
 					]
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "Step 5: Refresh Access Token using Refresh Token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"if (pm.response.code === 200) {",
+							"    var jsonData = pm.response.json();",
+							"",
+							"    // Support for different POSTMAN versions (backwards compatibility)",
+							"    if (pm.collectionVariables) {",
+							"        pm.collectionVariables.set(\"_access_token\", jsonData.access_token);",
+							"        pm.collectionVariables.set(\"_refresh_token\", jsonData.refresh_token);",
+							"    } else {",
+							"        pm.globals.set(\"_access_token\", jsonData.access_token);",
+							"        pm.globals.set(\"_refresh_token\", jsonData.refresh_token);",
+							"    }",
+							"}",
+							"else {",
+							"    console.log(\"Request failed with status code: \", pm.response.code);",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "{{USERNAME}}",
+							"type": "string"
+						},
+						{
+							"key": "showPassword",
+							"value": false,
+							"type": "boolean"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "refresh_token",
+							"value": "{{REFRESH_TOKEN}}",
+							"type": "text"
+						},
+						{
+							"key": "client_id",
+							"value": "{{APP_KEY}}",
+							"type": "text"
+						},
+						{
+							"key": "grant_type",
+							"value": "refresh_token",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://{{RDP_HOST}}/auth/oauth2/v1/token",
+					"protocol": "https",
+					"host": [
+						"{{RDP_HOST}}"
+					],
+					"path": [
+						"auth",
+						"oauth2",
+						"v1",
+						"token"
+					]
+				},
+				"description": "Gets the Access and Refresh tokens, using a previous refresh token"
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "_access_token",
+			"value": ""
+		},
+		{
+			"key": "_refresh_token",
+			"value": ""
 		}
 	]
 }
